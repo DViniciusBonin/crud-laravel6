@@ -32,7 +32,7 @@ class AddressController extends Controller
          
         $addresses->save();
 
-        return "Endereço cadastrado com sucesso!";
+        return response()->json($addresses, 201);
  
     }
 
@@ -53,6 +53,12 @@ class AddressController extends Controller
     {
         $address = Address::where('idClient', $id)->where('id', $idAddress)->first();
 
+        if(!$address) {
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
+        }
+
         $address->logradouro = $request->logradouro;
         $address->bairro =  $request->bairro;
         $address->numero =  $request->numero;
@@ -60,7 +66,7 @@ class AddressController extends Controller
 
         $address->save();
 
-        return "Endereço alterado com sucesso";
+        return response()->json($address);
 
         
     }
@@ -69,8 +75,14 @@ class AddressController extends Controller
     {
         $address = Address::where('idClient', $id)->where('id', $idAddress)->first();
 
+        if(!$address) {
+            return response()->json([
+                "message" => "Record not found"
+            ], 404);
+        }
+
+        
         $address->delete();
 
-        return "Endereço deletado com sucesso!";
     }
 }

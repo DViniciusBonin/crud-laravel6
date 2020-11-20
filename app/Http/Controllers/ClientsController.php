@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Client;
+use App\Address;
+use Tests\TestCase;
 
 class ClientsController extends Controller
 {
@@ -32,12 +34,12 @@ class ClientsController extends Controller
        $clients->razaoSocial = $request->razaoSocial;
        $clients->cnpj = $request->cnpj;
 
-        $clients->save();
-
+       return response()->json($clients, 201);
         
-      return "Cliente cadastrado com sucesso!";
-
     }
+        
+
+    
 
     /**
      * Display the specified resource.
@@ -74,6 +76,11 @@ class ClientsController extends Controller
     {
         $client = Client::find($id);
 
+        if(!$client) {
+            return response()->json([
+                'message' => 'Record not found',
+            ], 404);
+        }
         $client->nome = $request->nome;
         $client->razaoSocial = $request->razaoSocial;
         $client->cnpj = $request->cnpj;
@@ -81,7 +88,7 @@ class ClientsController extends Controller
         
         $client->save();
 
-        return "Cliente alterado com sucesso!";
+        return response()->json($client);
 
     }
 
@@ -94,10 +101,15 @@ class ClientsController extends Controller
     public function destroy($id)
     {
         $client = Client::find($id);
+        $address = Address::where('idClient', $id);
 
-
+        if(!$client || !$address){
+            return response()->json([
+                'message' => 'Record not found'
+            ], 404);
+        }
+        $address->delete();
         $client->delete();
-
-        return 'Cliente Deletado com sucesso!';
+        
     }
 }
