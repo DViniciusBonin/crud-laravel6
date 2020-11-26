@@ -12,14 +12,14 @@ class AddressController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index(int $id)
     {
         $addresses = Address::where('idClient', $id)->get();
 
         return response()->json($addresses);
     }
 
-    public function store(Request $request, $id)
+    public function store(Request $request, int $id)
     {
         
         $addresses = new Address();
@@ -42,14 +42,14 @@ class AddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $idAddress)
+    public function show(int $id, int $idAddress)
     {
         $address = Address::where('idClient', $id)->where('id', $idAddress)->get();
 
         return response()->json($address);
     }
 
-    public function update(Request $request, $id, $idAddress)
+    public function update(Request $request, int $id, int $idAddress)
     {
         $address = Address::where('idClient', $id)->where('id', $idAddress)->first();
 
@@ -71,7 +71,7 @@ class AddressController extends Controller
         
     }
 
-    public function destroy($id, $idAddress)
+    public function destroy(int $id, int $idAddress)
     {
         $address = Address::where('idClient', $id)->where('id', $idAddress)->first();
 
